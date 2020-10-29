@@ -5,35 +5,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/DataTables/datatables.min.css" />
+    <script src="<?php echo base_url() ?>assets/DataTables/datatables.min.js"></script> -->
+
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+
+
+
 </head>
 
 <body>
+
     <h1 style="text-align: center;">User List</h1>
     <a href="<?php echo base_url() ?>index.php/Main_controller"><button id="cancel">Dashboard</button></a>
     <hr><br><br>
-    <?php
-    $type = '';
-    foreach ($users as $user) {
-        if ($user['is_admin']) {
-            $type = 'Admin';
-        } else {
-            $type = 'Seller';
-        }
-        echo "<div class='container'>
-        <span id='user-id'>U-ID: </span>{$user['user_id']}<br><br>
-        <span id='user-type'>Type: </span>{$type}<br>
-        <span id='user-name'>Name: </span>{$user['full_name']}<br>
-        <span id='user-email'>Email: </span>{$user['email']}<br>
-        <span id='user-gender'>Gender: </span>{$user['gender']}<br>
-        <span id='user-phone'>Phone: </span>{$user['phone']}<br>
-        <span id='user-country'>Country: </span>{$user['country']}<br>
-        <span id='user-city'>City: </span>{$user['city']}<br><br>
-        <a href='edit/{$user['user_id']}'><button>Edit</button></a>
-        <a href='delete/{$user['user_id']}'><button>Delete</button></a>
-        </div><hr><br>";
-    }
 
-    ?>
+
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>U-ID</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Phone</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Created at</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $type = '';
+            foreach ($users as $user) {
+                if ($user['is_admin']) {
+                    $type = 'Admin';
+                } else {
+                    $type = 'Seller';
+                }
+
+                echo "
+            <tr id='data'>
+                <td>{$user['user_id']}</td>
+                <td>{$type}</td>
+                <td>{$user['full_name']}</td>
+                <td>{$user['email']}</td>
+                <td>{$user['gender']}</td>
+                <td>{$user['phone']}</td>
+                <td>{$user['country']}</td>
+                <td>{$user['city']}</td>
+                <td>{$user['created_at']}</td>
+                <td><a href='edit/{$user['user_id']}'><button>Edit</button></a></td>
+                <td><a href='delete/{$user['user_id']}'><button>Delete</button></a></td>
+                </tr>
+                ";
+            }
+
+            ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>U-ID</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Phone</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Created at</th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
+    </script>
 </body>
+
+
 
 </html>

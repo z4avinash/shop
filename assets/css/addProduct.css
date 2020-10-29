@@ -1,0 +1,15 @@
+.page1,
+.page2,
+.page3,
+.page4 {
+	position: absolute;
+	border: 1px solid black;
+	padding: 30px;
+}
+
+.viewform > .page1,
+.page2,
+.page3,
+.page4 {
+	position: relative;
+}

@@ -10,7 +10,8 @@
 <body>
     <h1>Seller Dashboard</h1>
     <a href="<?php echo base_url() ?>index.php/Main_controller/logout"><button id="logout">Log Out</button></a>
-
+    <a href="<?php echo base_url() ?>index.php/Main_controller/addProduct"><button id="addProduct">Add Product</button></a>
+    <a href="<?php echo base_url() ?>index.php/Main_controller/viewProduct"><button id="viewProduct">View Products</button></a>
 
 </body>
 

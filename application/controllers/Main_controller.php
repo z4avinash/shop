@@ -7,6 +7,8 @@ class Main_controller extends CI_Controller
         redirect(base_url() . 'index.php/Main_controller/login');
     }
 
+
+    //**********************************ADMIN SECTION**************************************************************** */
     //loading create page
     public function create()
     {
@@ -54,7 +56,7 @@ class Main_controller extends CI_Controller
 
 
 
-
+    // login functionality for user
     public function login()
     {
         //loading model
@@ -85,6 +87,7 @@ class Main_controller extends CI_Controller
                 if (!empty($returnedUser['user'])) {
                     if (!empty(password_verify($login_password, $returnedUser['user']['password']))) {
                         $this->session->set_userdata('user_id', $returnedUser['user']['user_id']);
+                        $this->session->set_userdata('type', $returnedUser['user']['is_admin']);
                         $this->session->set_userdata('isLoggedIn', true);
                         if ($returnedUser['user']['is_admin']) {
                             redirect(base_url() . 'index.php/Main_controller/admin_dash');
@@ -111,30 +114,33 @@ class Main_controller extends CI_Controller
     //admin dashboard
     public function admin_dash()
     {
-        $this->load->view('admin_dash');
+        if (!empty($this->session->userdata['isLoggedIn']) && $this->session->userdata['type']) {
+            $this->load->view('admin_dash');
+        } else {
+            redirect(base_url() . 'index.php/Main_controller/login');
+        }
     }
 
     //seller dashboard
     public function seller_dash()
     {
-        $this->load->view('seller_dash');
+        if (!empty($this->session->userdata['isLoggedIn']) && $this->session->userdata['type'] == 0) {
+            $this->load->view('seller_dash');
+        } else {
+            redirect(base_url() . 'index.php/Main_controller/login');
+        }
     }
 
 
 
-
-
-
-    //logout functionality
+    //logout functionality for user
     public function logout()
     {
         $this->session->sess_destroy();
         redirect(base_url() . 'index.php/Main_controller/login');
     }
 
-
-
-
+    //listing all the users
     public function list()
     {
         $this->load->model('Login_model');
@@ -142,7 +148,7 @@ class Main_controller extends CI_Controller
         $this->load->view('list', $returnedUser);
     }
 
-    //updating
+    //updating user details
     public function edit($user_id)
     {
         $this->load->model('Login_model');
@@ -172,11 +178,26 @@ class Main_controller extends CI_Controller
     }
 
 
-    //deleting
+    //deleting user
     public function delete($user_id)
     {
         $this->load->model('Login_model');
         $this->Login_model->delete($user_id);
         redirect(base_url() . 'index.php/Main_controller/list');
+    }
+
+    //***********************************SELLER SECTION***************************************************************** */
+
+    //add product
+    public function addProduct()
+    {
+        $this->load->view('addProduct');
+    }
+
+
+    //view product
+    public function viewProduct()
+    {
+        echo "view Products";
     }
 }
