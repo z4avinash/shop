@@ -12,6 +12,7 @@
 </head>
 
 <body>
+
     <h1 style="text-align: center;">User List</h1>
     <a href="<?php echo base_url() ?>index.php/Main_controller"><button id="cancel">Dashboard</button></a>
     <hr><br><br>
@@ -29,8 +30,8 @@
                 <th>Country</th>
                 <th>City</th>
                 <th>Created at</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <!-- <th>Edit</th>
+                <th>Delete</th> -->
             </tr>
         </thead>
         <tfoot>
@@ -44,8 +45,8 @@
                 <th>Country</th>
                 <th>City</th>
                 <th>Created at</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <!-- <th>Edit</th>
+                <th>Delete</th> -->
             </tr>
         </tfoot>
     </table>
@@ -56,6 +57,17 @@
             $('#example').DataTable({
                     ajax: {
                         url: '<?php echo base_url() ?>index.php/Main_controller/list_data',
+                        processing: true,
+                        serverSide: true,
+                        serverMethod: 'post',
+                        paging: true,
+                        searching: true,
+                        ordering: true,
+                        order: [
+                            [0, "asc"]
+                        ],
+                        scrollX: true,
+                        scroller: true,
                     },
                     columns: [{
                             data: "user_id"
@@ -84,12 +96,12 @@
                         {
                             data: "created_at"
                         },
-                        {
-                            data: "edit"
-                        },
-                        {
-                            data: 'delete'
-                        }
+                        // {
+                        //     data: "edit"
+                        // },
+                        // {
+                        //     data: 'delete'
+                        // }
                     ]
                 }
 
