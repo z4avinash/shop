@@ -144,8 +144,15 @@ class Main_controller extends CI_Controller
     public function list()
     {
         $this->load->model('Login_model');
-        $returnedUser['users'] = $this->Login_model->showCompleteList();
-        $this->load->view('list', $returnedUser);
+        $returnedUser = $this->Login_model->showCompleteList();
+        $this->load->view('list');
+    }
+
+    public function list_data()
+    {
+        $this->load->model('Login_model');
+        $returnedUser = $this->Login_model->showCompleteList();
+        echo json_encode(array('data' => $returnedUser));
     }
 
     //updating user details

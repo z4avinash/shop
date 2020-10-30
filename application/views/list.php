@@ -7,20 +7,11 @@
     <title>Document</title>
 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/DataTables/datatables.min.css" />
-    <script src="<?php echo base_url() ?>assets/DataTables/datatables.min.js"></script> -->
-
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-
-
-
-
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/DataTables/datatables.min.css" />
+    <script src="<?php echo base_url() ?>assets/DataTables/datatables.min.js"></script>
 </head>
 
 <body>
-
     <h1 style="text-align: center;">User List</h1>
     <a href="<?php echo base_url() ?>index.php/Main_controller"><button id="cancel">Dashboard</button></a>
     <hr><br><br>
@@ -42,35 +33,6 @@
                 <th>Delete</th>
             </tr>
         </thead>
-        <tbody>
-            <?php
-            $type = '';
-            foreach ($users as $user) {
-                if ($user['is_admin']) {
-                    $type = 'Admin';
-                } else {
-                    $type = 'Seller';
-                }
-
-                echo "
-            <tr id='data'>
-                <td>{$user['user_id']}</td>
-                <td>{$type}</td>
-                <td>{$user['full_name']}</td>
-                <td>{$user['email']}</td>
-                <td>{$user['gender']}</td>
-                <td>{$user['phone']}</td>
-                <td>{$user['country']}</td>
-                <td>{$user['city']}</td>
-                <td>{$user['created_at']}</td>
-                <td><a href='edit/{$user['user_id']}'><button>Edit</button></a></td>
-                <td><a href='delete/{$user['user_id']}'><button>Delete</button></a></td>
-                </tr>
-                ";
-            }
-
-            ?>
-        </tbody>
         <tfoot>
             <tr>
                 <th>U-ID</th>
@@ -82,6 +44,8 @@
                 <th>Country</th>
                 <th>City</th>
                 <th>Created at</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </tfoot>
     </table>
@@ -89,7 +53,47 @@
 
     <script>
         $(document).ready(function() {
-            $('#example').DataTable();
+            $('#example').DataTable({
+                    ajax: {
+                        url: '<?php echo base_url() ?>index.php/Main_controller/list_data',
+                    },
+                    columns: [{
+                            data: "user_id"
+                        },
+                        {
+                            data: "is_admin"
+                        },
+                        {
+                            data: "full_name"
+                        },
+                        {
+                            data: "email"
+                        },
+                        {
+                            data: "gender"
+                        },
+                        {
+                            data: "phone"
+                        },
+                        {
+                            data: "country"
+                        },
+                        {
+                            data: "city"
+                        },
+                        {
+                            data: "created_at"
+                        },
+                        {
+                            data: "edit"
+                        },
+                        {
+                            data: 'delete'
+                        }
+                    ]
+                }
+
+            );
         });
     </script>
 </body>

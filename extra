@@ -1,0 +1,29 @@
+        <tbody>
+            <?php
+            $type = '';
+            foreach ($users as $user) {
+                if ($user['is_admin']) {
+                    $type = 'Admin';
+                } else {
+                    $type = 'Seller';
+                }
+
+                echo "
+            <tr id='data'>
+                <td>{$user['user_id']}</td>
+                <td>{$type}</td>
+                <td>{$user['full_name']}</td>
+                <td>{$user['email']}</td>
+                <td>{$user['gender']}</td>
+                <td>{$user['phone']}</td>
+                <td>{$user['country']}</td>
+                <td>{$user['city']}</td>
+                <td>{$user['created_at']}</td>
+                <td><a href='edit/{$user['user_id']}'><button>Edit</button></a></td>
+                <td><a href='delete/{$user['user_id']}'><button>Delete</button></a></td>
+                </tr>
+                ";
+            }
+
+            ?>
+        </tbody>
