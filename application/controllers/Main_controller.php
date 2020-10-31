@@ -124,8 +124,10 @@ class Main_controller extends CI_Controller
     //seller dashboard
     public function seller_dash()
     {
+        $this->load->model('Login_model');
         if (!empty($this->session->userdata['isLoggedIn']) && $this->session->userdata['type'] == 0) {
-            $this->load->view('seller_dash');
+            $returnedUser['user'] = $this->Login_model->showData($this->session->userdata['user_id']);
+            $this->load->view('seller_dash', $returnedUser);
         } else {
             redirect(base_url() . 'index.php/Main_controller/login');
         }
@@ -195,16 +197,84 @@ class Main_controller extends CI_Controller
 
     //***********************************SELLER SECTION***************************************************************** */
 
-    //add product
+    //Only to load the view
     public function addProduct()
     {
         $this->load->view('addProduct');
     }
 
 
+    //The main and first saving funciton
+    public function page1()
+    {
+        $this->load->model('Login_model');
+
+
+        //save data to database
+        $formArray = array();
+        $formArray['title'] = $this->input->post('title');
+        $formArray['category'] = $this->input->post('category');
+        $formArray['description'] = $this->input->post('description');
+        $formArray['page_status'] = $this->input->post('page_status');
+        $formArray['is_active'] = 0;
+        $formArray['seller_id'] = $this->session->userdata['user_id'];
+        $formArray['created_at'] = date('Y-m-d H:i:s');
+        $this->Login_model->addProduct($formArray);
+        echo $this->db->insert_id();
+    }
+
+
+//Second part saving operation
+    public function page2($lastId)
+    {
+        $this->load->model('Login_model');
+        //save data to database
+        $formArray = array();
+        $formArray['highlights'] = $this->input->post('highlight1');
+        $formArray['page_status'] = $this->input->post('page_status');
+        $this->Login_model->updateProduct($lastId, $formArray);
+    }
+
+
+    //Third part saving operation
+    public function page3($lastId)
+    {
+        $this->load->model('Login_model');
+
+        //save data to database
+        $formArray = array();
+        $formArray['type'] = $this->input->post('type');
+        $Currency = $this->input->post('currency');
+        $formArray['price'] = $this->input->post('price') . " " . $Currency;
+        $formArray['page_status'] = $this->input->post('page_status');
+        $this->Login_model->updateProduct($lastId, $formArray);
+    }
+
+    //Fourth part saving operation
+    public function page4($lastId){
+        $this->load->model('Login_model');
+
+        //save data into database
+        $formArray = array();
+        
+        $formArray['page_status'] = $this->input->post('page-status');
+    }
+
     //view product
     public function viewProduct()
     {
-        echo "view Products";
+        $this->load->model('Login_model');
+        $returnedProduct['products'] = $this->Login_model->showAllProducts(1);
+        $this->load->view('finalProductList', $returnedProduct);
+    }
+
+
+
+    //unpublished products
+    public function unpublishedProducts()
+    {
+        $this->load->model('Login_model');
+        $returnedProduct['products'] = $this->Login_model->unpublishedProducts(0);
+        $this->load->view('productList', $returnedProduct);
     }
 }

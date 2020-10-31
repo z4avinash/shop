@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
@@ -13,25 +14,21 @@
 </head>
 
 <body>
+
     <h1 style="text-align: center;">Add Product</h1>
     <hr>
-    <!-- multistep form -->
-    <form id="msform">
-        <!-- progressbar -->
-        <ul id="progressbar">
-            <li class="active">Step 1</li>
-            <li>Step 2</li>
-            <li>Step 3</li>
-            <li>Step 4</li>
-        </ul>
-        <!-- fieldsets -->
-        <fieldset>
-            <h2 class="fs-title">Add Product</h2>
-            <h3 class="fs-subtitle">This is step 1</h3>
-            <input type="text" name="title" placeholder="Product Title" />
-            <input type="text" name="description" placeholder="Description" />
+    <div class="progress">
+        <span class="part-1">1</span><span class="part-2">2</span><span class="part-3">3</span><span class="part-4">4</span>
+    </div><br><br>
 
-            <select style="padding: 10px; width:100%; margin-bottom:10px; font-size:15px" name="category" id="category">
+    <input type="text" name="product_id" id="product_id" style="display: none;">
+
+    <div class="page1">
+        <form action="" method="post" id="page1" onsubmit="return false">
+
+            <input type="text" id="title" name="title" placeholder="Product Title" value="<?php echo set_value('title') ?>" ?> <?php echo form_error('title') ?> <br>
+            <input type="text" name="page_status" value="page1" style="display: none;">
+            <select name="category" value="<?php echo set_value('category') ?>" id="category"> <?php echo form_error('category') ?> <br>
                 <option selected disabled hidden>Category</option>
                 <option value="Entertainment">Entertainment</option>
                 <option value="Electronics">Electronics</option>
@@ -41,31 +38,26 @@
                 <option value="Clothing">Clothing</option>
                 <option value="Accessories">Accessories</option>
                 <option value="Household">Household</option>
-            </select>
-            <textarea name="description" id="" cols="30" rows="10" placeholder="Product Description"></textarea>
-            <input type="button" name="next" class="next action-button" value="Next" />
-        </fieldset>
+            </select><br><br>
+            <textarea name="description" id="" cols="30" rows="10" placeholder="Product Description"><?php echo set_value('description') ?></textarea> <?php echo form_error('description') ?> <br> <br>
+            <input onclick="savePage1andGoToPage2()" type="submit" name="next" class="next action-button" value="Next" />
+        </form>
+    </div>
 
-        <fieldset>
-            <h2 class="fs-title">Highlights</h2>
-            <h3 class="fs-subtitle">Add specifications of your product</h3>
-            <input type="text" name="highlight1" placeholder="highlight1" />
-            <input type="text" name="highlight2" placeholder="highlight2" />
-            <input type="text" name="highlight3" placeholder="highlight3" />
-            <input type="text" name="highlight4" placeholder="highlight4" />
-            <input type="text" name="highlight5" placeholder="highlight5" />
-            <input type="text" name="highlight6" placeholder="highlight6" />
-            <input type="text" name="highlight7" placeholder="highlight7" />
+    <div class="page2" style="display: none;">
+        <form action="" method="post" id="page2" onsubmit="return false">
+            <input type="text" name="page_status" value="page2" style="display: none;">
+            <textarea name="highlight1" id="highlight1" cols="30" rows="10" placeholder="product highlights"></textarea><br><br>
             <input type="button" name="previous" class="previous action-button" value="Previous" />
-            <input type="button" name="next" class="next action-button" value="Next" />
-        </fieldset>
+            <input type="button" name="next" onclick="savePage2andGoToPage3()" class="next action-button" value="Next" />
+        </form>
+    </div>
 
+    <div class="page3" style="display: none;">
+        <form action="" method="post" id="page3" onsubmit="return false">
 
-        <fieldset>
-            <h2 class="fs-title">More Details</h2>
-            <h3 class="fs-subtitle">More Details</h3>
-
-            <select style="padding: 10px; width:100%; margin-bottom:10px; font-size:15px" name=type id="type">
+            <input type="text" name="page_status" value="page3" style="display: none;">
+            <select style="font-size:15px" name=type id="type">
                 <option selected disabled hidden>Type</option>
                 <option value="Basic">Basic</option>
                 <option value="Regular">Regular</option>
@@ -75,26 +67,26 @@
 
             <div class="price" style="display:flex">
                 <input type="number" width="60%" name="price" placeholder="Price" />
-                <select style="padding: 10px; width:40%; margin-bottom:10px; font-size:13px" name=type id="type">
+                <select style="font-size:13px" name=currency id="currency">
                     <option selected disabled hidden>Currency</option>
                     <option value="USD">USD</option>
                     <option value="INR">INR</option>
                     <option value="EUR">EUR</option>
                     <option value="Special">Special</option>
                 </select>
-            </div>
+            </div><br><br>
             <input type="button" name="previous" class="previous action-button" value="Previous" />
-            <input type="button" name="next" class="next action-button" value="Next" />
-        </fieldset>
+            <input type="button" onclick="savePage3andGoToPage4()" name="next" class="next action-button" value="Next" />
+        </form>
+    </div>
 
-        <fieldset>
-            <h2 class="fs-title">Product Availability</h2>
-            <h3 class="fs-subtitle">Availability Time</h3>
-            <input type="number" placeholder="quantity left" name="quantity">
-            <label>Available from: </label> <input type="date" name="start">
-            <label>Available to: </label><input type="date" name="end">
-            <label>Available on Dates: </label><input type="text" class="form-control date" name="multiDate" id="multiDate" placeholder="Pick the multiple dates">
-            <label>Availabile Days: </label>
+    <div class="page4" style="display: none;">
+        <form action="" id="page4" method="post" onsubmit="return false">
+            <input type="number" placeholder="quantity left" name="quantity"><br>
+            <label>Available from: </label> <input type="date" name="start"><b></b>
+            <label>Available to: </label><input type="date" name="end"><br>
+            <label>Available on Dates: </label><input type="text" class="form-control date" name="multiDate" id="multiDate" placeholder="Pick the multiple dates"><br>
+            <label>Availabile Days: </label><br>
             <div class="days" style="display: flex;">
                 Mon: <input name="week" value="monday" type="checkbox">
                 Tue: <input name="week" value="tuesday" type="checkbox">
@@ -104,114 +96,83 @@
                 Sat: <input name="week" value="saturday" type="checkbox">
                 Sun: <input name="week" value="sunday" type="checkbox">
             </div>
-
-            <label>Available from: </label><input type="time" name="start_time">
-            <label>Available to: </label><input type="time" name="end_time">
+            <br>
+            <label>Available from: </label><input type="time" name="start_time"><br>
+            <label>Available to: </label><input type="time" name="end_time"><br><br>
             <input type="button" name="previous" class="previous action-button" value="Previous" />
-            <input type="submit" name="submit" class="submit action-button" value="Submit" />
-        </fieldset>
-    </form>
-    <a href="<?php echo base_url() ?>index.php/Main_controller"><button class="" id="cancel">Cancel</button></a>
+            <input type="button" name="preview" class="preview" value="Preview" onclick="previewForm()" />
+            </fieldset>
+        </form>
+    </div>
+
+    <a href="<?php echo base_url() ?>index.php/Main_controller"><button id="cancel">Cancel</button></a>
 
     <script>
-        //jQuery time
-        var current_fs, next_fs, previous_fs; //fieldsets
-        var left, opacity, scale; //fieldset properties which we will animate
-        var animating; //flag to prevent quick multi-click glitches
-
-        $(".next").click(function() {
-            if (animating) return false;
-            animating = true;
-
-            current_fs = $(this).parent();
-            next_fs = $(this).parent().next();
-
-            //activate next step on progressbar using the index of next_fs
-            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-            //show the next fieldset
-            next_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function(now, mx) {
-                    //as the opacity of current_fs reduces to 0 - stored in "now"
-                    //1. scale current_fs down to 80%
-                    scale = 1 - (1 - now) * 0.2;
-                    //2. bring next_fs from the right(50%)
-                    left = (now * 50) + "%";
-                    //3. increase opacity of next_fs to 1 as it moves in
-                    opacity = 1 - now;
-                    current_fs.css({
-                        'transform': 'scale(' + scale + ')',
-                        'position': 'absolute'
-                    });
-                    next_fs.css({
-                        'left': left,
-                        'opacity': opacity
-                    });
-                },
-                duration: 800,
-                complete: function() {
-                    current_fs.hide();
-                    animating = false;
-                },
-                //this comes from the custom easing plugin
-                easing: 'easeInOutBack'
-            });
-        });
-
-        $(".previous").click(function() {
-            if (animating) return false;
-            animating = true;
-
-            current_fs = $(this).parent();
-            previous_fs = $(this).parent().prev();
-
-            //de-activate current step on progressbar
-            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-            //show the previous fieldset
-            previous_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function(now, mx) {
-                    //as the opacity of current_fs reduces to 0 - stored in "now"
-                    //1. scale previous_fs from 80% to 100%
-                    scale = 0.8 + (1 - now) * 0.2;
-                    //2. take current_fs to the right(50%) - from 0%
-                    left = ((1 - now) * 50) + "%";
-                    //3. increase opacity of previous_fs to 1 as it moves in
-                    opacity = 1 - now;
-                    current_fs.css({
-                        'left': left
-                    });
-                    previous_fs.css({
-                        'transform': 'scale(' + scale + ')',
-                        'opacity': opacity
-                    });
-                },
-                duration: 800,
-                complete: function() {
-                    current_fs.hide();
-                    animating = false;
-                },
-                //this comes from the custom easing plugin
-                easing: 'easeInOutBack'
-            });
-        });
-
-        $(".submit").click(function() {
-            return false;
-        })
-
+        //For Date Picker
         $('.date').datepicker({
             multidate: true,
             format: 'dd-mm-yyyy'
         });
+
+        //save page1 and move to page 2
+        function savePage1andGoToPage2() {
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo base_url() . 'index.php/Main_controller/page1' ?>',
+                data: $('#page1').serialize(),
+                success: function(res) {
+                    $('#product_id').attr('value', res);
+                }
+            });
+
+            $('.part-1').css('background-color', 'green')
+            document.querySelector('.page1').style.display = "none";
+            document.querySelector('.page2').style.display = "block";
+            document.querySelector('.page3').style.display = "none";
+            document.querySelector('.page4').style.display = "none";
+        }
+
+
+        //save page 2 and move to page 3
+        function savePage2andGoToPage3() {
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo base_url("index.php/Main_controller/page2/") ?>' + $('#product_id').val(),
+                data: $('#page2').serialize(),
+                success: function() {}
+            });
+            $('.part-1').css('background-color', 'green')
+            $('.part-2').css('background-color', 'green')
+
+            document.querySelector('.page1').style.display = "none";
+            document.querySelector('.page2').style.display = "none";
+            document.querySelector('.page3').style.display = "block";
+            document.querySelector('.page4').style.display = "none";
+        }
+
+        //save page 3 and move to page 4
+        function savePage3andGoToPage4() {
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo base_url("index.php/Main_controller/page3/") ?>' + $('#product_id').val(),
+                data: $('#page3').serialize(),
+                success: function() {}
+            });
+            $('.part-1').css('background-color', 'green')
+            $('.part-2').css('background-color', 'green')
+            $('.part-3').css('background-color', 'green')
+
+            document.querySelector('.page1').style.display = "none";
+            document.querySelector('.page2').style.display = "none";
+            document.querySelector('.page3').style.display = "none";
+            document.querySelector('.page4').style.display = "block";
+        }
+
+        //preview form
+        //save page 3 and move to page 4
+        function previewForm() {
+            alert('not implemented yet');
+        }
     </script>
     </div>
 </body>
