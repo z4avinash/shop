@@ -49,6 +49,18 @@ class Login_model extends CI_model
         $this->db->insert('products', $formData);
     }
 
+    //add product type
+    public function addProductType($formData)
+    {
+        $this->db->insert('types', $formData);
+    }
+
+    //update product type
+    public function updateProductType($product_id, $formData)
+    {
+        $this->db->where('product_type_id', $product_id)->update('types', $formData);
+    }
+
     //show all products
     public function showAllProducts($is_active)
     {

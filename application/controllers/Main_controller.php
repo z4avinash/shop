@@ -248,18 +248,38 @@ class Main_controller extends CI_Controller
 
 
     //Third part saving operation
-    public function page3($lastId)
+    public function page3()
     {
         $this->load->model('Login_model');
 
-        //save data to database
-        $formArray = array();
-        $formArray['type'] = $this->input->post('type');
-        $Currency = $this->input->post('currency');
-        $formArray['price'] = $this->input->post('price') . " " . $Currency;
-        $formArray['page_status'] = $this->input->post('page_status');
-        $this->Login_model->updateProduct($lastId, $formArray);
+        $ptypeId0 = $this->input->post('ptypeId0');
+        $ptypeId1 = $this->input->post('ptypeId1');
+        $ptypeId2 = $this->input->post('ptypeId2');
+        $ptypeId3 = $this->input->post('ptypeId3');
+        $ptypeId4 = $this->input->post('ptypeId4');
+
+        //for ptypeId0
+        if ($ptypeId0 != 0) {
+            //save data to database
+            $formArray = array();
+            $formArray['type'] = $this->input->post('type');
+            $formArray['currency'] = $this->input->post('currency');
+            $formArray['price'] = $this->input->post('price');
+            // $formArray['page_status'] = $this->input->post('page_status');
+            $this->Login_model->updateProductType($ptypeId0, $formArray);
+            echo $ptypeId0;
+        } else {
+            //save data to database
+            $formArray = array();
+            $formArray['type'] = $this->input->post('type');
+            $formArray['currency'] = $this->input->post('currency');
+            $formArray['price'] = $this->input->post('price');
+            // $formArray['page_status'] = $this->input->post('page_status');
+            $this->Login_model->addProductType($formArray);
+            echo $this->db->insert_id();
+        }
     }
+
 
     //Fourth part saving operation
     public function page4($lastId)
@@ -282,9 +302,9 @@ class Main_controller extends CI_Controller
 
 
 
+
     public function clearProducts()
     {
-        $this->session->unset_userdata('created_at');
         redirect(base_url() . 'index.php/Main_controller/');
     }
 

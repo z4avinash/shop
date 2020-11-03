@@ -63,26 +63,30 @@
 
         <!-- Form 3 -->
         <div class="page3" style="display: none;">
-            <form action="" method="post" id="page3" onsubmit="return false">
+            <button id="add">Add More Types</button><br><br>
 
-                <input type="text" name="page_status" value="page3" style="display: none;">
-                <select style="font-size:15px" name=type id="type">
-                    <option selected disabled hidden>Type</option>
-                    <option value="Basic">Basic</option>
-                    <option value="Regular">Regular</option>
-                    <option value="Special">Special</option>
-                </select>
-                <div class="price" style="display:flex">
-                    <input type="number" width="60%" name="price" placeholder="Price" />
-                    <select style="font-size:13px" name=currency id="currency">
-                        <option selected disabled hidden>Currency</option>
-                        <option value="USD">USD</option>
-                        <option value="INR">INR</option>
-                        <option value="EUR">EUR</option>
+            <form action="" class="type-selection" method="post" id="page3" onsubmit="return false">
+                <div class="types-container">
+                    <input type="text" value="0" id="ptypeId0" name="ptypeId0" style="display: none;">
+                    <input type="text" name="page_status" value="page3" style="display: none;">
+                    <select name=type id="type" value="<?php echo set_value('type') ?>">
+                        <option selected disabled hidden>Type</option>
+                        <option value="Basic">Basic</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Special">Special</option>
                     </select>
-                </div><br><br>
+                    <div class="price" style="display:flex">
+                        <input type="number" width="60%" id="price" name="price" placeholder="Price" />
+                        <select name=currency id="currency">
+                            <option selected disabled hidden>Currency</option>
+                            <option value="USD">USD</option>
+                            <option value="INR">INR</option>
+                            <option value="EUR">EUR</option>
+                        </select>
+                    </div>
+                </div>
                 <input type="button" onclick="fromPage3ToPage2()" name="previous" class="previous action-button" value="Previous" />
-                <input type="button" onclick="savePage3andGoToPage4()" name="next" class="next action-button" value="Next" />
+                <input type="submit" onclick="savePage3andGoToPage4()" name="next" class="next action-button" value="Next" />
             </form>
         </div>
 
@@ -114,7 +118,7 @@
 
     <a href="<?php echo base_url() ?>index.php/Main_controller/clearProducts"><button id="cancel">Cancel</button></a>
 
-    <script src="<?php echo base_url() ?>assets/js/script.js"></script>
+    <script src="<?php echo base_url() ?>/assets/js/script.js"></script>
     </div>
 </body>
 
