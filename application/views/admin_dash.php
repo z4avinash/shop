@@ -19,6 +19,10 @@
     <a href="<?php echo base_url() ?>index.php/Main_controller/list">
         <button id="view-user">View Users</button>
     </a>
+
+    <a href="<?php echo base_url() ?>index.php/Main_controller/adminProductView">
+        <button id="view-product">View Products</button>
+    </a>
 </body>
 
 </html>

@@ -107,10 +107,6 @@ class Main_controller extends CI_Controller
     }
 
 
-
-
-
-
     //admin dashboard
     public function admin_dash()
     {
@@ -208,99 +204,17 @@ class Main_controller extends CI_Controller
     public function page1()
     {
         $this->load->model('Login_model');
-        $product_id = $this->input->post('product_id');
-
-        if ($product_id != 0) {
-            $formArray = array();
-            $formArray['title'] = $this->input->post('title');
-            $formArray['category'] = $this->input->post('category');
-            $formArray['description'] = $this->input->post('description');
-            $this->Login_model->updateProduct($product_id, $formArray);
-            echo $product_id;
-        } else {
-            //save data to database
-            $formArray = array();
-            $formArray['title'] = $this->input->post('title');
-            $formArray['category'] = $this->input->post('category');
-            $formArray['description'] = $this->input->post('description');
-            $formArray['page_status'] = $this->input->post('page_status');
-            $formArray['is_active'] = 0;
-            $formArray['seller_id'] = $this->session->userdata['user_id'];
-            $formArray['created_at'] = date('Y-m-d H:i:s');
-            $this->Login_model->addProduct($formArray);
-            echo $this->db->insert_id();
-        }
-    }
-
-
-
-
-    //Second part saving operation
-    public function page2($lastId)
-    {
-        $this->load->model('Login_model');
-        //save data to database
         $formArray = array();
-        $formArray['highlights'] = $this->input->post('highlight1');
-        $formArray['page_status'] = $this->input->post('page_status');
-        $this->Login_model->updateProduct($lastId, $formArray);
+        $formArray['title'] = $this->input->post('title');
+        $formArray['category'] = $this->input->post('category');
+        $formArray['description'] = $this->input->post('description');
+        $formArray['is_active'] = 0;
+        $formArray['seller_id'] = $this->session->userdata['user_id'];
+        $formArray['date'] = date('Y-m-d');
+        $formArray['created_at'] = date('Y-m-d H:i:s');
+        $this->Login_model->addProduct($formArray);
+        redirect(base_url() . 'index.php/Main_controller/unpublishedProducts');
     }
-
-
-    //Third part saving operation
-    public function page3()
-    {
-        $this->load->model('Login_model');
-
-        $ptypeId0 = $this->input->post('ptypeId0');
-        $ptypeId1 = $this->input->post('ptypeId1');
-        $ptypeId2 = $this->input->post('ptypeId2');
-        $ptypeId3 = $this->input->post('ptypeId3');
-        $ptypeId4 = $this->input->post('ptypeId4');
-
-        //for ptypeId0
-        if ($ptypeId0 != 0) {
-            //save data to database
-            $formArray = array();
-            $formArray['type'] = $this->input->post('type');
-            $formArray['currency'] = $this->input->post('currency');
-            $formArray['price'] = $this->input->post('price');
-            // $formArray['page_status'] = $this->input->post('page_status');
-            $this->Login_model->updateProductType($ptypeId0, $formArray);
-            echo $ptypeId0;
-        } else {
-            //save data to database
-            $formArray = array();
-            $formArray['type'] = $this->input->post('type');
-            $formArray['currency'] = $this->input->post('currency');
-            $formArray['price'] = $this->input->post('price');
-            // $formArray['page_status'] = $this->input->post('page_status');
-            $this->Login_model->addProductType($formArray);
-            echo $this->db->insert_id();
-        }
-    }
-
-
-    //Fourth part saving operation
-    public function page4($lastId)
-    {
-        $this->load->model('Login_model');
-
-        //save data into database
-        $formArray = array();
-
-        $formArray['quantity_left'] = $this->input->post('quantity');
-        $formArray['available_startDate'] = $this->input->post('available_startDate');
-        $formArray['available_endDate'] = $this->input->post('available_endDate');
-        $formArray['available_dates'] = $this->input->post('multiDate');
-        $formArray['page_status'] = $this->input->post('page-status');
-        $formArray['start_time'] = $this->input->post('start_time');
-        $formArray['end_time'] = $this->input->post('end_time');
-        $this->Login_model->updateProduct($lastId, $formArray);
-        $this->session->unset_userdata('created_at');
-    }
-
-
 
 
     public function clearProducts()
@@ -318,7 +232,13 @@ class Main_controller extends CI_Controller
         $this->load->view('finalProductList', $returnedProduct);
     }
 
-
+    //view products
+    public function adminProductView()
+    {
+        $this->load->model('Login_model');
+        $returnedProduct['products'] = $this->Login_model->unpublishedProducts(0);
+        $this->load->view('adminApprove', $returnedProduct);
+    }
 
     //unpublished products
     public function unpublishedProducts()
@@ -336,5 +256,21 @@ class Main_controller extends CI_Controller
 
         $returnedProduct['product'] = $this->Login_model->showSpecificProduct($product_id);
         $this->load->view('editProduct', $returnedProduct);
+    }
+
+
+    //approve products
+    public function approveProduct($product_id)
+    {
+        $this->load->model('Login_model');
+
+        $formArray = array();
+        $formArray['title'] = $this->input->post('title');
+        $formArray['category'] = $this->input->post('category');
+        $formArray['description'] = $this->input->post('description');
+        $formArray['is_active'] = 1;
+        $this->Login_model->approveProduct($product_id, $formArray);
+
+        redirect(base_url() . 'index.php/Main_controller/adminProductView');
     }
 }
