@@ -15,6 +15,7 @@
     <a href="<?php echo base_url() ?>index.php/Main_controller/viewProduct"><button id="viewProduct">View Products</button></a>
 
 
+
     <br><br><br><br><br>
 
 </body>

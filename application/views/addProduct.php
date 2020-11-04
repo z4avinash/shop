@@ -41,14 +41,15 @@
                     <option value="Accessories">Accessories</option>
                     <option value="Household">Household</option>
                 </select><br><br>
-                <textarea name="description" id="" cols="30" rows="10" placeholder="Product Description"><?php echo set_value('description') ?></textarea> <?php echo form_error('description') ?> <br> <br>
+                <textarea name="description" id="" cols="30" rows="10" placeholder="Product Description"><?php echo set_value('description') ?></textarea> <?php echo form_error('description') ?> <br>
+                <input type="date" name="date" id="date"> <br> <br>
                 <input type="submit" name="next" value="Next" />
             </form><br>
         </div>
 
 
 
-        <a href="<?php echo base_url() ?>index.php/Main_controller/clearProducts"><button id="cancel">Cancel</button></a>
+        <a href="<?php echo base_url() ?>index.php/Main_controller"><button id="cancel">Cancel</button></a>
 
         <script src="<?php echo base_url() ?>/assets/js/script.js"></script>
     </div>

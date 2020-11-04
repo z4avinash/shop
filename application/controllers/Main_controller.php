@@ -204,6 +204,7 @@ class Main_controller extends CI_Controller
     public function page1()
     {
         $this->load->model('Login_model');
+
         $formArray = array();
         $formArray['title'] = $this->input->post('title');
         $formArray['category'] = $this->input->post('category');
@@ -217,10 +218,6 @@ class Main_controller extends CI_Controller
     }
 
 
-    public function clearProducts()
-    {
-        redirect(base_url() . 'index.php/Main_controller/');
-    }
 
 
 
@@ -272,5 +269,47 @@ class Main_controller extends CI_Controller
         $this->Login_model->approveProduct($product_id, $formArray);
 
         redirect(base_url() . 'index.php/Main_controller/adminProductView');
+    }
+
+
+    //get random entries based on date from products table and create csv file
+    public function csv()
+    {
+        $this->load->model('Login_model');
+        //getting data form the database
+        $returnedEntriesFromProducts = $this->Login_model->getRandomEntriesFromProducts();
+        $returnedEntiriesFromSubProducts = $this->Login_model->getRandomEntriesFromSubProducts();
+        $commonTitle = array();
+        $missingEntries = array();
+
+        for ($i = 0; $i < count($returnedEntriesFromProducts); $i++) {
+            for ($j = 0; $j < count($returnedEntiriesFromSubProducts); $j++) {
+                if ($returnedEntriesFromProducts[$i]['title'] == $returnedEntiriesFromSubProducts[$j]['title']) {
+                    array_push($commonTitle, $returnedEntriesFromProducts[$i]['title']);
+                }
+            }
+        }
+
+        for ($i = 0; $i < count($returnedEntriesFromProducts); $i++) {
+            if (!in_array($returnedEntriesFromProducts[$i]['title'], $commonTitle)) {
+                array_push($missingEntries, array($returnedEntriesFromProducts[$i]['product_id'], $returnedEntriesFromProducts[$i]['title'], $returnedEntriesFromProducts[$i]['description'], $returnedEntriesFromProducts[$i]['date']));
+            }
+        }
+        //generating the csv file of the missing items
+        header("Content-disposition: attachment; filename=test.csv");
+        header("Content-Type: text/csv");
+        $fp = fopen('php://output', 'w');
+
+        foreach ($missingEntries as $item) {
+            fputcsv($fp, $item);
+        }
+    }
+
+
+    //******************************************************************************************************************* */
+    //redirect to the main controller
+    public function clearProducts()
+    {
+        redirect(base_url() . 'index.php/Main_controller/');
     }
 }

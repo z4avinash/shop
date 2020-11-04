@@ -78,4 +78,16 @@ class Login_model extends CI_model
     {
         $this->db->where('product_id', $product_id)->update('products', $formData);
     }
+
+    //get random entries from the products table
+    public function getRandomEntriesFromProducts()
+    {
+        return $this->db->order_by('product_id', 'random')->limit('15')->get('products')->result_array();
+    }
+
+    //get random entries from the products table
+    public function getRandomEntriesFromSubProducts()
+    {
+        return $this->db->order_by('sub_product_id', 'random')->limit('15')->get('sub_product')->result_array();
+    }
 }
