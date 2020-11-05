@@ -17,7 +17,10 @@ class Login_model extends CI_model
     //show all users
     public function showCompleteList()
     {
-        return $user = $this->db->get('users')->result_array();
+        $this->db->cache_on();
+        $user = $this->db->get('users')->result_array();
+        $this->db->cache_off();
+        return $user;
     }
 
     //show specific user
@@ -46,6 +49,7 @@ class Login_model extends CI_model
     //add product
     public function addProduct($formData)
     {
+
         $this->db->insert('products', $formData);
     }
 

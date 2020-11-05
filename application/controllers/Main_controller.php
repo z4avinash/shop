@@ -142,16 +142,18 @@ class Main_controller extends CI_Controller
     public function list()
     {
         $this->load->model('Login_model');
-        $returnedUser = $this->Login_model->showCompleteList();
-        $this->load->view('list');
+        $returnedUser['users'] = $this->Login_model->showCompleteList();
+        $this->load->view('list', $returnedUser);
+        $this->db->cache_delete('Main_controller', 'edit');
     }
 
-    public function list_data()
-    {
-        $this->load->model('Login_model');
-        $returnedUser = $this->Login_model->showCompleteList();
-        echo json_encode(array('data' => $returnedUser));
-    }
+    // public function list_data()
+    // {
+    //     $this->load->model('Login_model');
+    //     $returnedUser = $this->Login_model->showCompleteList();
+    //     echo json_encode(array('data' => $returnedUser));
+    //     // $this->db->cache_delete('Main_controller', 'list_data');
+    // }
 
     //updating user details
     public function edit($user_id)
@@ -178,6 +180,7 @@ class Main_controller extends CI_Controller
             $hashedPassword = $this->input->post('password');
             $formArray['password'] = password_hash($hashedPassword, PASSWORD_DEFAULT);
             $this->Login_model->updateUser($user_id, $formArray);
+            $this->db->cache_delete('Main_controller', 'list');
             redirect(base_url() . 'index.php/Main_controller/list');
         }
     }
@@ -241,8 +244,23 @@ class Main_controller extends CI_Controller
     public function unpublishedProducts()
     {
         $this->load->model('Login_model');
-        $returnedProduct['products'] = $this->Login_model->unpublishedProducts(0);
-        $this->load->view('productList', $returnedProduct);
+
+        $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+
+        if (!$returnedProduct = $this->cache->get('returnedProduct')) {
+            echo 'Saving to the cache!<br />';
+            $returnedProduct = $this->Login_model->unpublishedProducts(0);
+            // Save into the cache for 5 minutes
+            $this->cache->save('returnedProduct', $returnedProduct, 300);
+            $this->load->view('productList', array('products' => $returnedProduct));
+        }
+        $this->load->view('productList', array('products' => $returnedProduct));
+
+
+
+
+        // $returnedProduct = $this->Login_model->unpublishedProducts(0);
+        // $this->load->view('productList', array('products' => $returnedProduct));
     }
 
 
