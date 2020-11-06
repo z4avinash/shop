@@ -10,6 +10,7 @@
 <body>
     <div class="container">
         <form action="<?php echo base_url() ?>index.php/Main_controller/addUserToDB" method="post">
+
             <div class="full_name">
                 <label>Full Name: </label> <input type="text" placeholder="enter your name" name="full_name" id="full_name" value="<?php echo set_value('full_name') ?>"><?php echo form_error('full_name') ?>
             </div><br>

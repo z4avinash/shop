@@ -26,16 +26,15 @@
 
             foreach ($products as $product) {
                 echo "
-    <tr id='data'>
-    <td>{$product['product_id']}</td>
-    <td>{$product['title']}</td>
-    <td>{$product['category']}</td>
-    <td><a href='editProduct/{$product['product_id']}'><button>Edit</button></a></td>
-    <td><a href='deleteProduct/{$product['product_id']}'><button>Delete</button></a></td>
-    </tr>
-    ";
+<tr id='data'>
+<td>{$product['product_id']}</td>
+<td>{$product['title']}</td>
+<td>{$product['category']}</td>
+<td><a href='editProduct/{$product['product_id']}'><button>Edit</button></a></td>
+<td><a href='deleteProduct/{$product['product_id']}'><button>Delete</button></a></td>
+</tr>
+";
             }
-
             ?>
         </tbody>
         <tfoot>

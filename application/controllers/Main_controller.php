@@ -37,17 +37,19 @@ class Main_controller extends CI_Controller
         } else {
             //save data to database
             $formArray = array();
-            $formArray['full_name'] = $this->input->post('full_name');
-            $formArray['email'] = $this->input->post('email');
-            $formArray['phone'] = $this->input->post('phone');
-            $formArray['gender'] = $this->input->post('gender');
-            $formArray['country'] = $this->input->post('country');
-            $formArray['city'] = $this->input->post('city');
+            $formArray['full_name'] = $this->security->sanitize_filename($this->input->post('full_name'));
+            $formArray['email'] = $this->security->sanitize_filename($this->input->post('email'));
+            $formArray['phone'] = $this->security->sanitize_filename($this->input->post('phone'));
+            $formArray['gender'] = $this->security->sanitize_filename($this->input->post('gender'));
+            $formArray['country'] = $this->security->sanitize_filename($this->input->post('country'));
+            $formArray['city'] = $this->security->sanitize_filename($this->input->post('city'));
             $formArray['is_admin'] = false;
-            $hashedPassword = $this->input->post('password');
+            $hashedPassword = $this->security->sanitize_filename($this->input->post('password'));
             $formArray['password'] = password_hash($hashedPassword, PASSWORD_DEFAULT);
             $formArray['created_at'] = date('Y-m-d H:i:s');
+            $formArray = $this->security->xss_clean($formArray);
             $this->Login_model->createUser($formArray);
+            $this->db->cache_delete('Main_controller', 'list');
             redirect(base_url() . 'index.php/Main_controller/admin_dash');
         }
     }
@@ -110,10 +112,18 @@ class Main_controller extends CI_Controller
     //admin dashboard
     public function admin_dash()
     {
-        if (!empty($this->session->userdata['isLoggedIn']) && $this->session->userdata['type']) {
-            $this->load->view('admin_dash');
-        } else {
-            redirect(base_url() . 'index.php/Main_controller/login');
+
+        try {
+            //code...
+            // $test = 4 / 0;
+            if (!empty($this->session->userdata['isLoggedIn']) && $this->session->userdata['type']) {
+                $this->load->view('admin_dash');
+            } else {
+                redirect(base_url() . 'index.php/Main_controller/login');
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            // print_r($e);
         }
     }
 
@@ -171,14 +181,15 @@ class Main_controller extends CI_Controller
             $this->load->view('edit', $user);
         } else {
             $formArray = array();
-            $formArray['full_name'] = $this->input->post('full_name');
-            $formArray['phone'] = $this->input->post('phone');
-            $formArray['gender'] = $this->input->post('gender');
-            $formArray['country'] = $this->input->post('country');
-            $formArray['city'] = $this->input->post('city');
+            $formArray['full_name'] = $this->security->sanitize_filename($this->input->post('full_name'));
+            $formArray['phone'] = $this->security->sanitize_filename($this->input->post('phone'));
+            $formArray['gender'] = $this->security->sanitize_filename($this->input->post('gender'));
+            $formArray['country'] = $this->security->sanitize_filename($this->input->post('country'));
+            $formArray['city'] = $this->security->sanitize_filename($this->input->post('city'));
             $formArray['is_admin'] = false;
-            $hashedPassword = $this->input->post('password');
+            $hashedPassword = $this->security->sanitize_filename($this->input->post('password'));
             $formArray['password'] = password_hash($hashedPassword, PASSWORD_DEFAULT);
+            $formArray = $this->security->xss_clean($formArray);
             $this->Login_model->updateUser($user_id, $formArray);
             $this->db->cache_delete('Main_controller', 'list');
             redirect(base_url() . 'index.php/Main_controller/list');
@@ -191,6 +202,7 @@ class Main_controller extends CI_Controller
     {
         $this->load->model('Login_model');
         $this->Login_model->delete($user_id);
+        $this->db->cache_delete('Main_controller', 'list');
         redirect(base_url() . 'index.php/Main_controller/list');
     }
 
@@ -244,16 +256,16 @@ class Main_controller extends CI_Controller
     public function unpublishedProducts()
     {
         $this->load->model('Login_model');
+        $returnedProduct = $this->Login_model->unpublishedProducts(0);
+        // $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 
-        $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
-
-        if (!$returnedProduct = $this->cache->get('returnedProduct')) {
-            echo 'Saving to the cache!<br />';
-            $returnedProduct = $this->Login_model->unpublishedProducts(0);
-            // Save into the cache for 5 minutes
-            $this->cache->save('returnedProduct', $returnedProduct, 300);
-            $this->load->view('productList', array('products' => $returnedProduct));
-        }
+        // if (!$returnedProduct = $this->cache->get('returnedProduct')) {
+        //     $returnedProduct = $this->Login_model->unpublishedProducts(0);
+        //     echo 'Saving to the cache!<br />';
+        //     // Save into the cache for 5 minutes
+        //     $this->cache->save('returnedProduct', $returnedProduct, 300);
+        //     $this->load->view('productList', array('products' => $returnedProduct));
+        // }
         $this->load->view('productList', array('products' => $returnedProduct));
 
 
@@ -280,9 +292,6 @@ class Main_controller extends CI_Controller
         $this->load->model('Login_model');
 
         $formArray = array();
-        $formArray['title'] = $this->input->post('title');
-        $formArray['category'] = $this->input->post('category');
-        $formArray['description'] = $this->input->post('description');
         $formArray['is_active'] = 1;
         $this->Login_model->approveProduct($product_id, $formArray);
 
